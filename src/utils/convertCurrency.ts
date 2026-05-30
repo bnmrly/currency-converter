@@ -13,7 +13,7 @@ type ConvertCurrencyApiResponse = {
   date: string;
 };
 
-type ConvertCurrencyResult = {
+export type ConvertCurrencyResult = {
   amount: number;
   convertedAmount: number;
   fromCurrency: CurrencyCode;

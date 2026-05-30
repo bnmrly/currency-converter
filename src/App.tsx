@@ -1,5 +1,4 @@
 import { CurrencyForm } from "@/components/CurrencyForm/CurrencyForm";
-import { Results } from "@/components/Results/Results";
 
 function App() {
   return (
@@ -8,10 +7,7 @@ function App() {
         <h1 className="text-3xl font-semibold">Currency Converter</h1>
         <p>Convert currencies instantly with live exchange rates</p>
       </header>
-      <div className="flex flex-col gap-4 lg:flex-row">
-        <CurrencyForm />
-        <Results />
-      </div>
+      <CurrencyForm />
     </main>
   );
 }
