@@ -1,6 +1,6 @@
 import { DEFAULT_FROM_CURRENCY, DEFAULT_TO_CURRENCY } from "@/consts/currency";
 import { convertCurrency, getCurrencies } from "@/utils";
-import type { Currency, CurrencyCode } from "@/utils";
+import type { Currency, CurrencyCode, ConvertCurrencyResult } from "@/utils";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
@@ -21,6 +21,9 @@ export const CurrencyForm = () => {
   });
 
   const [currencies, setCurrencies] = useState<Currency[]>([]);
+  const [convertedResult, setConvertedResult] =
+    useState<ConvertCurrencyResult | null>(null);
+  console.log("------ convertedResult:", convertedResult);
 
   useEffect(() => {
     const loadCurrencies = async () => {
@@ -61,7 +64,7 @@ export const CurrencyForm = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const result = await convertCurrency(data);
-      console.log("conversion result:", result);
+      setConvertedResult(result);
     } catch (err) {
       if (err instanceof Error) console.log("err", err.message);
     }
@@ -76,7 +79,7 @@ export const CurrencyForm = () => {
         <div className="flex flex-1 flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="amount">Amount</label>
-            <div className="flex items-center rounded-md border border-gray-400 px-4">
+            <div className="flex items-center rounded-md border border-gray-400 p-2">
               <input
                 id="amount"
                 {...register("amount")}
@@ -85,33 +88,47 @@ export const CurrencyForm = () => {
                 min="0"
                 // step="0.01"
                 required
-                className="w-full bg-transparent text-xl outline-none"
+                className="w-full bg-transparent text-md outline-none"
               />
-              <span className="ml-3 text-sm font-medium">{fromCurrency}</span>
+              <span className="ml-3 text-xs font-light text-gray-600">
+                {fromCurrency}
+              </span>
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="from-currency">From</label>
             {currencies.length > 0 && (
-              <select id="from-currency" {...register("fromCurrency")}>
-                {currencies.map((currency: Currency) => (
-                  <option key={currency.value} value={currency.value}>
-                    {currency.label}
-                  </option>
-                ))}
-              </select>
+              <div className="rounded-md border border-gray-400 p-2">
+                <select
+                  id="from-currency"
+                  {...register("fromCurrency")}
+                  className="w-full bg-transparent text-md outline-none"
+                >
+                  {currencies.map((currency: Currency) => (
+                    <option key={currency.value} value={currency.value}>
+                      {currency.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="to-currency">To</label>
             {currencies.length > 0 && (
-              <select id="to-currency" {...register("toCurrency")}>
-                {currencies.map((currency: Currency) => (
-                  <option key={currency.value} value={currency.value}>
-                    {currency.label}
-                  </option>
-                ))}
-              </select>
+              <div className="rounded-md border border-gray-400 p-2">
+                <select
+                  id="to-currency"
+                  {...register("toCurrency")}
+                  className="w-full bg-transparent text-md outline-none"
+                >
+                  {currencies.map((currency: Currency) => (
+                    <option key={currency.value} value={currency.value}>
+                      {currency.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             )}
           </div>
           <button type="submit" className="bg-gray-300 rounded-md p-2">
@@ -119,7 +136,10 @@ export const CurrencyForm = () => {
           </button>
         </div>
         <section className="flex flex-1 flex-col gap-2 rounded-md border border-gray-300 p-4">
-          <p>This is the results section</p>
+          <p>
+            The converted amount is {convertedResult?.convertedAmount}{" "}
+            {convertedResult?.fromCurrency}
+          </p>
         </section>
       </div>
     </form>
