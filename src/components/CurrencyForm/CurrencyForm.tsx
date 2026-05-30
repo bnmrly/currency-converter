@@ -61,6 +61,10 @@ export const CurrencyForm = () => {
     name: "fromCurrency",
   });
 
+  const clearConvertedResult = () => {
+    setConvertedResult(null);
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const result = await convertCurrency(data);
@@ -82,7 +86,9 @@ export const CurrencyForm = () => {
             <div className="flex items-center rounded-md border border-gray-400 p-2">
               <input
                 id="amount"
-                {...register("amount")}
+                {...register("amount", {
+                  onChange: clearConvertedResult,
+                })}
                 type="text" // revisit
                 inputMode="decimal"
                 min="0"
@@ -101,7 +107,9 @@ export const CurrencyForm = () => {
               <div className="rounded-md border border-gray-400 p-2">
                 <select
                   id="from-currency"
-                  {...register("fromCurrency")}
+                  {...register("fromCurrency", {
+                    onChange: clearConvertedResult,
+                  })}
                   className="w-full bg-transparent text-md outline-none"
                 >
                   {currencies.map((currency: Currency) => (
@@ -119,7 +127,9 @@ export const CurrencyForm = () => {
               <div className="rounded-md border border-gray-400 p-2">
                 <select
                   id="to-currency"
-                  {...register("toCurrency")}
+                  {...register("toCurrency", {
+                    onChange: clearConvertedResult,
+                  })}
                   className="w-full bg-transparent text-md outline-none"
                 >
                   {currencies.map((currency: Currency) => (
@@ -136,10 +146,12 @@ export const CurrencyForm = () => {
           </button>
         </div>
         <section className="flex flex-1 flex-col gap-2 rounded-md border border-gray-300 p-4">
-          <p>
-            The converted amount is {convertedResult?.convertedAmount}{" "}
-            {convertedResult?.fromCurrency}
-          </p>
+          {convertedResult?.convertedAmount && (
+            <p>
+              The converted amount is {convertedResult?.convertedAmount}{" "}
+              {convertedResult?.fromCurrency}
+            </p>
+          )}
         </section>
       </div>
     </form>
