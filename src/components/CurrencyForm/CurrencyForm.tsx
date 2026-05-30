@@ -10,7 +10,18 @@ type Inputs = {
   toCurrency: CurrencyCode;
 }; //TODO: zod stuff
 
+const DEFAULT_FROM_CURRENCY = "GBP";
+const DEFAULT_TO_CURRENCY = "EUR";
+
 export const CurrencyForm = () => {
+  const { register, handleSubmit, setValue } = useForm<Inputs>({
+    defaultValues: {
+      amount: "100",
+      fromCurrency: DEFAULT_FROM_CURRENCY,
+      toCurrency: DEFAULT_TO_CURRENCY,
+    },
+  });
+
   const [currencies, setCurrencies] = useState<Currency[]>([]);
 
   useEffect(() => {
@@ -18,20 +29,33 @@ export const CurrencyForm = () => {
       try {
         const currencyList = await getCurrencies();
         setCurrencies(currencyList);
+
+        if (currencyList.length === 0) return;
+
+        const availableCurrencyValues = new Set(
+          currencyList.map((currency) => currency.value),
+        );
+
+        const fallbackFromCurrency = currencyList[0].value;
+
+        const fallbackToCurrency =
+          currencyList[1]?.value ?? fallbackFromCurrency;
+
+        if (!availableCurrencyValues.has(DEFAULT_FROM_CURRENCY)) {
+          setValue("fromCurrency", fallbackFromCurrency);
+        }
+
+        if (!availableCurrencyValues.has(DEFAULT_TO_CURRENCY)) {
+          setValue("toCurrency", fallbackToCurrency);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     loadCurrencies();
-  }, []);
+  }, [setValue]);
 
-  const { register, handleSubmit } = useForm<Inputs>({
-    defaultValues: {
-      amount: "100",
-      fromCurrency: "GBP",
-      toCurrency: "EUR",
-    },
-  });
+  console.log("///// currencies:", currencies);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
