@@ -145,6 +145,8 @@ export const CurrencyForm = () => {
             Convert
           </button>
         </div>
+
+        {/* TODO: ADD PLACEHOLDER TO PREVENT CLS */}
         <section className="flex flex-1 flex-col gap-2 rounded-md border border-gray-300 p-4">
           {convertedResult?.convertedAmount && (
             <p>
