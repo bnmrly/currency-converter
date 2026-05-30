@@ -1,7 +1,8 @@
+import { DEFAULT_FROM_CURRENCY, DEFAULT_TO_CURRENCY } from "@/consts/currency";
 import { convertCurrency, getCurrencies } from "@/utils";
 import type { Currency, CurrencyCode } from "@/utils";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 
 type Inputs = {
@@ -10,11 +11,8 @@ type Inputs = {
   toCurrency: CurrencyCode;
 }; //TODO: zod stuff
 
-const DEFAULT_FROM_CURRENCY = "GBP";
-const DEFAULT_TO_CURRENCY = "EUR";
-
 export const CurrencyForm = () => {
-  const { register, handleSubmit, setValue } = useForm<Inputs>({
+  const { register, control, handleSubmit, setValue } = useForm<Inputs>({
     defaultValues: {
       amount: "100",
       fromCurrency: DEFAULT_FROM_CURRENCY,
@@ -55,7 +53,10 @@ export const CurrencyForm = () => {
     loadCurrencies();
   }, [setValue]);
 
-  console.log("///// currencies:", currencies);
+  const fromCurrency = useWatch({
+    control,
+    name: "fromCurrency",
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -86,9 +87,7 @@ export const CurrencyForm = () => {
                 required
                 className="w-full bg-transparent text-xl outline-none"
               />
-              <span className="ml-3 text-sm font-medium" aria-hidden="true">
-                GBP
-              </span>
+              <span className="ml-3 text-sm font-medium">{fromCurrency}</span>
             </div>
           </div>
           <div className="flex flex-col gap-2">
