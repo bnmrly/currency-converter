@@ -1,16 +1,17 @@
+import { CurrencyForm } from "@/components/CurrencyForm/CurrencyForm";
+import { Results } from "@/components/Results/Results";
+
 function App() {
   return (
-    <main>
-      <header>
-        <h1 className="text-blue-300">Currency Converter</h1>
+    <main className="border border-gray-400 m-4 rounded-md p-4">
+      <header className="text-center pb-4">
+        <h1 className="text-3xl font-semibold">Currency Converter</h1>
         <p>Convert currencies instantly with live exchange rates</p>
       </header>
-      <section>
-        <p>This is the form section</p>
-      </section>
-      <section>
-        <p>This is the results section</p>
-      </section>
+      <div className="flex flex-col gap-4 lg:flex-row">
+        <CurrencyForm />
+        <Results />
+      </div>
     </main>
   );
 }
