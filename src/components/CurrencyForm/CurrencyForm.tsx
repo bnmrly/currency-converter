@@ -170,7 +170,7 @@ export const CurrencyForm = () => {
           </button>
         </div>
 
-        <section className="flex min-h-24 flex-1 flex-col gap-2 rounded-md border border-general-border py-6 px-2">
+        <section className="flex min-h-32 flex-1 flex-col gap-2 rounded-md border border-general-border p-4 lg:min-w-80">
           {convertedResult ? (
             <div className="flex flex-col  pb-4">
               <p className="font-semibold text-sm pb-1">Converted amount:</p>
@@ -187,7 +187,7 @@ export const CurrencyForm = () => {
             </div>
           ) : disableConvert ? (
             <p className="text-error text-sm">
-              Please select a different currency to convert
+              Choose two different currencies to convert
             </p>
           ) : (
             <p className="text-sm text-app-text-minimal">
