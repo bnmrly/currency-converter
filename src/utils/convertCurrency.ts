@@ -40,7 +40,6 @@ export const convertCurrency = async ({
   const result: ConvertCurrencyApiResponse = await response.json();
 
   const convertedAmount = parsedAmount * result.rate;
-  console.log("🚀 _ convertedAmount:", convertedAmount);
 
   return {
     amount: parsedAmount,
