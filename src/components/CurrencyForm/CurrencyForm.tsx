@@ -92,7 +92,7 @@ export const CurrencyForm = () => {
         <div className="flex flex-1 flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="amount">Amount</label>
-            <div className="flex items-center rounded-md border border-gray-400 p-2">
+            <div className="flex items-center rounded-md border border-input-border p-2 focus-within:border-focus focus-within:ring-2 focus-within:ring-focus/20">
               <input
                 id="amount"
                 {...register("amount", {
@@ -105,7 +105,7 @@ export const CurrencyForm = () => {
                 required
                 className="w-full bg-transparent text-md outline-none"
               />
-              <span className="ml-3 text-xs font-light text-gray-600">
+              <span className="ml-3 text-xs font-light text-app-text-minimal">
                 {fromCurrency}
               </span>
             </div>
@@ -113,7 +113,7 @@ export const CurrencyForm = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="from-currency">From</label>
             {currencies.length > 0 && (
-              <div className="rounded-md border border-gray-400 p-2">
+              <div className="rounded-md border border-input-border p-2 focus-within:border-focus focus-within:ring-2 focus-within:ring-focus/20">
                 <select
                   id="from-currency"
                   {...register("fromCurrency", {
@@ -133,7 +133,7 @@ export const CurrencyForm = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="to-currency">To</label>
             {currencies.length > 0 && (
-              <div className="rounded-md border border-gray-400 p-2">
+              <div className="rounded-md border border-input-border p-2 focus-within:border-focus focus-within:ring-2 focus-within:ring-focus/20">
                 <select
                   id="to-currency"
                   {...register("toCurrency", {
@@ -152,14 +152,14 @@ export const CurrencyForm = () => {
           </div>
           <button
             type="submit"
-            className="rounded-md p-2 border border-gray-400 disabled:border-red-500"
+            className="cursor-pointer rounded-md border border-input-border bg-button-background p-2 text-button-text font-semibold focus-visible:opacity-80 disabled:border-error disabled:bg-transparent disabled:text-error disabled:cursor-not-allowed hover:opacity-80 "
             disabled={disableConvert}
           >
-            Convert
+            CONVERT
           </button>
         </div>
 
-        <section className="flex flex-1 flex-col gap-2 rounded-md border border-gray-300 p-4">
+        <section className="flex flex-1 flex-col gap-2 rounded-md border border-general-border p-4">
           {convertedResult?.convertedAmount && (
             <p>
               The converted amount is{" "}
@@ -170,7 +170,7 @@ export const CurrencyForm = () => {
             </p>
           )}
           {disableConvert && (
-            <p className="text-red-500">
+            <p className="text-error">
               Please select a different currency to convert
             </p>
           )}
