@@ -10,9 +10,16 @@ type Inputs = {
   fromCurrency: CurrencyCode;
   toCurrency: CurrencyCode;
 }; //TODO: zod stuff
+//TODO: Error handling for api status codes
 
 export const CurrencyForm = () => {
-  const { register, control, handleSubmit, setValue } = useForm<Inputs>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<Inputs>({
     defaultValues: {
       amount: "100",
       fromCurrency: DEFAULT_FROM_CURRENCY,
@@ -21,9 +28,10 @@ export const CurrencyForm = () => {
   });
 
   const [currencies, setCurrencies] = useState<Currency[]>([]);
+  console.log("🚀 ~ currencies:", currencies);
+
   const [convertedResult, setConvertedResult] =
     useState<ConvertCurrencyResult | null>(null);
-  console.log("------ convertedResult:", convertedResult);
 
   useEffect(() => {
     const loadCurrencies = async () => {
@@ -96,19 +104,20 @@ export const CurrencyForm = () => {
               <input
                 id="amount"
                 {...register("amount", {
+                  required: "Amount is required",
                   onChange: clearConvertedResult,
                 })}
-                type="text" // revisit
+                type="text"
                 inputMode="decimal"
-                min="0"
-                // step="0.01"
-                required
                 className="w-full bg-transparent text-md outline-none"
               />
               <span className="ml-3 text-xs font-light text-app-text-minimal">
                 {fromCurrency}
               </span>
             </div>
+            {errors.amount && (
+              <p className="text-error text-sm">{errors.amount.message}</p>
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="from-currency">From</label>
@@ -170,7 +179,7 @@ export const CurrencyForm = () => {
             </p>
           )}
           {disableConvert && (
-            <p className="text-error">
+            <p className="text-error text-sm">
               Please select a different currency to convert
             </p>
           )}
