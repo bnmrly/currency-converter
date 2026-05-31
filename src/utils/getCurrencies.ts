@@ -22,10 +22,14 @@ export const getCurrencies = async (): Promise<Currency[]> => {
 
   const currencies: CurrencyApiResponse[] = await currencyResponse.json();
 
-  // TODO: filter end date and date.now
+  // If the API starts returning expired currencies, filter out items with an end_date before today, so users only see currencies that can be converted.
 
-  return currencies.map((currency) => ({
-    value: currency.iso_code,
-    label: currency.name,
-  }));
+  const collator = new Intl.Collator("en-GB", { sensitivity: "base" });
+
+  return currencies
+    .map((currency) => ({
+      value: currency.iso_code,
+      label: currency.name,
+    }))
+    .sort((a, b) => collator.compare(a.label, b.label));
 };
