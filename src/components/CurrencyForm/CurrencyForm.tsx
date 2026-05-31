@@ -56,10 +56,19 @@ export const CurrencyForm = () => {
     loadCurrencies();
   }, [setValue]);
 
-  const fromCurrency = useWatch({
-    control,
-    name: "fromCurrency",
-  });
+  const fromCurrency = useWatch({ control, name: "fromCurrency" });
+
+  const toCurrency = useWatch({ control, name: "toCurrency" });
+
+  // Prevent users from converting the same from and to currency
+  const disableConvert = fromCurrency === toCurrency;
+
+  // Format for display and keep the raw API/calculated numbers in state.
+  const formatCurrency = (amount: number, currency: CurrencyCode) =>
+    new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency,
+    }).format(amount);
 
   const clearConvertedResult = () => {
     setConvertedResult(null);
@@ -77,7 +86,7 @@ export const CurrencyForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4 rounded-md border-[5px] border-green-500 p-4"
+      className="flex flex-col gap-4 rounded-md p-4"
     >
       <div className="flex flex-col gap-4 lg:flex-row">
         <div className="flex flex-1 flex-col gap-4">
@@ -141,17 +150,28 @@ export const CurrencyForm = () => {
               </div>
             )}
           </div>
-          <button type="submit" className="bg-gray-300 rounded-md p-2">
+          <button
+            type="submit"
+            className="rounded-md p-2 border border-gray-400 disabled:border-red-500"
+            disabled={disableConvert}
+          >
             Convert
           </button>
         </div>
 
-        {/* TODO: ADD PLACEHOLDER TO PREVENT CLS */}
         <section className="flex flex-1 flex-col gap-2 rounded-md border border-gray-300 p-4">
           {convertedResult?.convertedAmount && (
             <p>
-              The converted amount is {convertedResult?.convertedAmount}{" "}
-              {convertedResult?.fromCurrency}
+              The converted amount is{" "}
+              {formatCurrency(
+                convertedResult.convertedAmount,
+                convertedResult.toCurrency,
+              )}
+            </p>
+          )}
+          {disableConvert && (
+            <p className="text-red-500">
+              Please select a different currency to convert
             </p>
           )}
         </section>
