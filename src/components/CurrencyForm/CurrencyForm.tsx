@@ -1,13 +1,13 @@
-import { DEFAULT_FROM_CURRENCY, DEFAULT_TO_CURRENCY } from "@/consts/currency";
-import { CurrencyFormSchema, type CurrencyFormValues } from "@/schema/schemas";
-import { convertCurrency, getCurrencies } from "@/utils";
-import type { Currency, CurrencyCode, ConvertCurrencyResult } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 
-//TODO: Error handling for api status codes
+import { DEFAULT_FROM_CURRENCY, DEFAULT_TO_CURRENCY } from "@/consts/currency";
+import { CurrencyFormSchema } from "@/schema/schemas";
+import { convertCurrency, getCurrencies } from "@/utils";
+import type { CurrencyFormValues } from "@/schema/schemas";
+import type { Currency, CurrencyCode, ConvertCurrencyResult } from "@/utils";
 
 export const CurrencyForm = () => {
   const {
