@@ -1,16 +1,18 @@
+import { z } from "zod";
+
 export type CurrencyCode = string;
+
+const ConvertCurrencyApiResponseSchema = z.object({
+  base: z.string(),
+  quote: z.string(),
+  rate: z.number(),
+  date: z.string(),
+});
 
 type ConvertCurrencyArgs = {
   amount: string;
   fromCurrency: CurrencyCode;
   toCurrency: CurrencyCode;
-};
-
-type ConvertCurrencyApiResponse = {
-  base: CurrencyCode;
-  quote: CurrencyCode;
-  rate: number;
-  date: string;
 };
 
 export type ConvertCurrencyResult = {
@@ -27,8 +29,6 @@ export const convertCurrency = async ({
   fromCurrency,
   toCurrency,
 }: ConvertCurrencyArgs): Promise<ConvertCurrencyResult> => {
-  // TODO: do null checks with zod re amount
-
   const parsedAmount = Number(amount);
 
   const url = `https://api.frankfurter.dev/v2/rate/${fromCurrency}/${toCurrency}`;
@@ -37,7 +37,7 @@ export const convertCurrency = async ({
 
   if (!response.ok) throw new Error(`Response status: ${response.status}`);
 
-  const result: ConvertCurrencyApiResponse = await response.json();
+  const result = ConvertCurrencyApiResponseSchema.parse(await response.json());
 
   const convertedAmount = parsedAmount * result.rate;
 

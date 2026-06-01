@@ -1,11 +1,15 @@
-type CurrencyApiResponse = {
-  iso_code: string;
-  name: string;
-  symbol: string;
-  iso_numeric: string;
-  start_date: string;
-  end_date: string | null;
-};
+import { z } from "zod";
+
+const CurrencyApiSchema = z.object({
+  iso_code: z.string(),
+  name: z.string(),
+  symbol: z.string(),
+  iso_numeric: z.string(),
+  start_date: z.string(),
+  end_date: z.string().nullable(),
+});
+
+const CurrenciesApiResponseSchema = z.array(CurrencyApiSchema);
 
 export type Currency = {
   value: string;
@@ -20,7 +24,9 @@ export const getCurrencies = async (): Promise<Currency[]> => {
   if (!currencyResponse.ok)
     throw new Error(`currencyResponse status: ${currencyResponse.status}`);
 
-  const currencies: CurrencyApiResponse[] = await currencyResponse.json();
+  const currencies = CurrenciesApiResponseSchema.parse(
+    await currencyResponse.json(),
+  );
 
   // If the API starts returning expired currencies, filter out items with an end_date before today, so users only see currencies that can be converted.
 

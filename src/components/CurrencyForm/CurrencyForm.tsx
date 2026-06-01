@@ -1,15 +1,12 @@
 import { DEFAULT_FROM_CURRENCY, DEFAULT_TO_CURRENCY } from "@/consts/currency";
+import { CurrencyFormSchema, type CurrencyFormValues } from "@/schema/schemas";
 import { convertCurrency, getCurrencies } from "@/utils";
 import type { Currency, CurrencyCode, ConvertCurrencyResult } from "@/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 
-type Inputs = {
-  amount: string;
-  fromCurrency: CurrencyCode;
-  toCurrency: CurrencyCode;
-}; //TODO: zod stuff
 //TODO: Error handling for api status codes
 
 export const CurrencyForm = () => {
@@ -19,7 +16,8 @@ export const CurrencyForm = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<CurrencyFormValues>({
+    resolver: zodResolver(CurrencyFormSchema),
     defaultValues: {
       amount: "100",
       fromCurrency: DEFAULT_FROM_CURRENCY,
@@ -84,7 +82,7 @@ export const CurrencyForm = () => {
     setConvertedResult(null);
   };
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<CurrencyFormValues> = async (data) => {
     try {
       const result = await convertCurrency(data);
       setConvertedResult(result);
@@ -106,7 +104,6 @@ export const CurrencyForm = () => {
               <input
                 id="amount"
                 {...register("amount", {
-                  required: "Amount is required",
                   onChange: clearConvertedResult,
                 })}
                 type="text"
