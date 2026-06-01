@@ -5,7 +5,7 @@ export type CurrencyCode = string;
 const ConvertCurrencyApiResponseSchema = z.object({
   base: z.string(),
   quote: z.string(),
-  rate: z.number(),
+  rate: z.number().positive(),
   date: z.string(),
 });
 
