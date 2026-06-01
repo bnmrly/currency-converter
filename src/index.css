@@ -7,9 +7,10 @@
   --color-app-text-minimal: #4b5563;
   --color-error: #d92d20;
   --color-input-border: #cbd5e1;
-  --color-general-border: #0f766e;
+  --color-general-border: #5eead4;
   --color-focus: #2563eb;
-  --color-button-background: #0f766e;
+  --color-accent: #0f766e;
+  --color-button-background: var(--color-accent);
   --color-button-text: #ffffff;
 }
 
