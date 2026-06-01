@@ -165,6 +165,7 @@ describe("CurrencyForm", () => {
     expect(await screen.findByText("Converted amount:")).toBeTruthy();
     expect(screen.getByText("€115.00")).toBeTruthy();
     expect(screen.getByText("1 GBP = 1.1500 EUR")).toBeTruthy();
+    expect(screen.getByText("As of 1 Jun 2026")).toBeTruthy();
   });
 
   it("disables convert when the same currency is selected twice", async () => {

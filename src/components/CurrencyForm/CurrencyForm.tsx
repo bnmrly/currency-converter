@@ -78,6 +78,13 @@ export const CurrencyForm = () => {
       currency,
     }).format(amount);
 
+  const formatRateDate = (date: string) =>
+    new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }).format(new Date(date));
+
   const clearConvertedResult = () => {
     setConvertedResult(null);
   };
@@ -177,9 +184,12 @@ export const CurrencyForm = () => {
                   convertedResult.toCurrency,
                 )}
               </p>
-              <p className="font-semibold text-sm text-app-text-minimal pt-4">
+              <p className="font-semibold text-sm text-app-text-minimal pt-4 pb-2">
                 1 {convertedResult.fromCurrency} ={" "}
                 {convertedResult.rate.toFixed(4)} {convertedResult.toCurrency}
+              </p>
+              <p className="text-sm text-app-text-minimal">
+                As of {formatRateDate(convertedResult.date)}
               </p>
             </div>
           ) : disableConvert ? (
