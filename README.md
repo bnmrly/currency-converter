@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# Currency Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small React currency converter built with Vite. It fetches available currencies and live exchange rates from the Frankfurter API, validates user input with Zod, and displays the converted result in a simple responsive form.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Install dependencies:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start the local development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Build the app for production:
+
+```bash
+npm run build
+```
+
+Run linting:
+
+```bash
+npm run lint
+```
+
+Format files:
+
+```bash
+npm run format
+```
+
+Check formatting without changing files:
+
+```bash
+npm run format:check
+```
+
+Preview a production build:
+
+```bash
+npm run preview
+```
+
+## Tech Stack
+
+- **React 19** for the UI.
+- **Vite 8** for local development and production builds.
+- **TypeScript** for static typing.
+- **Tailwind CSS 4** for styling.
+- **React Hook Form** for form state and submit handling.
+- **Zod** for form validation and runtime API response validation.
+- **@hookform/resolvers** to connect Zod validation to React Hook Form.
+- **TanStack React Query** is installed and is a good candidate for the next data-fetching refactor.
+- **Frankfurter API** for currency lists and exchange rates.
+
+## Current Behaviour
+
+- Users can enter an amount, choose source and target currencies, and convert between them.
+- Amount validation rejects empty values, non-decimal text, scientific notation, negative numbers, zero, values over `1,000,000,000`, and more than two decimal places.
+- API responses are parsed with Zod before the app uses them.
+- The convert button is disabled when the source and target currencies are the same.
+
+## TODO
+
+- Move currency loading and conversion requests to TanStack React Query.
+- Add user-facing API and network error messages.
+- Add loading states
+- Prevent duplicate conversion submits
