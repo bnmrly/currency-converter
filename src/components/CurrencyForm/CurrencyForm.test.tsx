@@ -120,6 +120,34 @@ describe("CurrencyForm", () => {
     expect(await screen.findByText("Amount must be a number")).toBeTruthy();
   });
 
+  it("shows an error when the amount is negative", async () => {
+    const user = userEvent.setup();
+
+    render(<CurrencyForm />);
+
+    await screen.findByLabelText(/from/i);
+    await user.clear(screen.getByLabelText(/amount/i));
+    await user.type(screen.getByLabelText(/amount/i), "-1");
+    await user.click(screen.getByRole("button", { name: /convert/i }));
+
+    expect(await screen.findByText("Amount must be a number")).toBeTruthy();
+  });
+
+  it("shows an error when the amount is above the maximum", async () => {
+    const user = userEvent.setup();
+
+    render(<CurrencyForm />);
+
+    await screen.findByLabelText(/from/i);
+    await user.clear(screen.getByLabelText(/amount/i));
+    await user.type(screen.getByLabelText(/amount/i), "1000000001");
+    await user.click(screen.getByRole("button", { name: /convert/i }));
+
+    expect(
+      await screen.findByText("Amount must be 1,000,000,000 or less"),
+    ).toBeTruthy();
+  });
+
   it("calls convertCurrency with the selected form values", async () => {
     const user = userEvent.setup();
 
