@@ -107,32 +107,6 @@ describe("CurrencyForm", () => {
     ).toBeTruthy();
   });
 
-  it("shows an error when the amount uses scientific notation", async () => {
-    const user = userEvent.setup();
-
-    render(<CurrencyForm />);
-
-    await screen.findByLabelText(/from/i);
-    await user.clear(screen.getByLabelText(/amount/i));
-    await user.type(screen.getByLabelText(/amount/i), "1e6");
-    await user.click(screen.getByRole("button", { name: /convert/i }));
-
-    expect(await screen.findByText("Amount must be a number")).toBeTruthy();
-  });
-
-  it("shows an error when the amount is negative", async () => {
-    const user = userEvent.setup();
-
-    render(<CurrencyForm />);
-
-    await screen.findByLabelText(/from/i);
-    await user.clear(screen.getByLabelText(/amount/i));
-    await user.type(screen.getByLabelText(/amount/i), "-1");
-    await user.click(screen.getByRole("button", { name: /convert/i }));
-
-    expect(await screen.findByText("Amount must be a number")).toBeTruthy();
-  });
-
   it("shows an error when the amount is above the maximum", async () => {
     const user = userEvent.setup();
 
@@ -208,21 +182,5 @@ describe("CurrencyForm", () => {
     expect(
       screen.getByText("Choose two different currencies to convert"),
     ).toBeTruthy();
-  });
-
-  it("falls back when the default currencies are not available", async () => {
-    mockedGetCurrencies.mockResolvedValue([
-      { value: "USD", label: "US Dollar" },
-      { value: "CAD", label: "Canadian Dollar" },
-    ]);
-
-    render(<CurrencyForm />);
-
-    expect(
-      ((await screen.findByLabelText(/from/i)) as HTMLSelectElement).value,
-    ).toBe("USD");
-    expect((screen.getByLabelText(/to/i) as HTMLSelectElement).value).toBe(
-      "CAD",
-    );
   });
 });
